@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> MIT4 </title>
+  <style>
+    .outer{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+    }
+
+    .header{
+      background-color: black;
+      width: 100%;
+      color: white;
+      text-align: center;
+    }
+
+    
+
+
+    .sub1, .sub2{
+      margin-left: 20px;
+      
+    }
+
+    .sub{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap:2px;
+    }
+
+    #namestyle, #mailstyle{
+      margin-bottom: 2px;
+      font-size: 16px;
+    }
+
+    button{
+      background-color: blue;
+      color: white;
+      border-radius: 5px;
+      width: 60px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin-left: 20px;
+    }
+
+    .submit{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+ .outputborder{
+  display: flex;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  text-align: left;
+  gap: 50%;
+  
+ }
+
+ 
+
+
+    
+  </style>
+</head>
+<body>
+  <div class="outer">
+   
+         <div class="header"> 
+            <h4> CONTACT MANAGER </h4>
+         </div>
+ 
+         <div class="sidehead"> 
+            <h3 id="sidehead"> Add Contact </h3>
+         </div>
+  
+         <div class="sub">
+  
+           <div class="sub1"> 
+              <h6 id="namestyle"> Name </h6>
+              <input type="text" id="name">
+           </div>
+  
+           <div class="sub2"> 
+              <h6 id="mailstyle"> E-mail </h6>
+              <input type="text" id="mail">
+           </div>
+  
+        </div>
+  
+      <div class="submit">
+        <!-- <button id="submit" onclick="mapp()"> Submit </button> -->
+        <button onclick="Create()"> Create</button>
+        <button onclick="mapp()"> Show </button>
+      </div>
+  
+  
+      <div class="output" id="output"> </div>
+   
+    
+  </div>
+
+  <script>
+
+    var userTasks = JSON.parse(localStorage.getItem('userTasks')) || [];
+
+
+function Create(){
+  var name = document.getElementById('name');
+  var mail = document.getElementById('mail');
+  
+  var timestamp = new Date().getTime();
+  var random = Math.floor(Math.random() * 1000);
+  var uniqueId = timestamp + random;
+  
+  userTasks.push( 
+    { 
+      id: uniqueId , 
+      name: name.value, 
+      mail: mail.value
+    } 
+  );
+  localStorage.setItem('userTasks', JSON.stringify(userTasks));
+}
+
+function mapp(){
+  var datas = userTasks.map( function (user) {
+    
+      return `<div class="outputborder">
+
+          <div class="outputwrapper">
+
+                <div class="task-category">
+                    <h2>${user.name}</h2>
+                    <p> ${user.mail}</p>
+                </div>
+
+            </div>
+
+            <div class="deletion">
+                <button style="width: 80px; background-color: white; border-color: brown; color: brown; cursor: pointer; padding: 4px 8px; border-radius: 6px;" onclick='deleteTask( ${user.id} )'> DELETE </button>
+            </div>
+
+          </div>
+
+      </div>
+    `
+  });
+
+  document.getElementById('output').innerHTML = datas.join('');
+}
+
+
+function deleteTask(id) {
+  userTasks = userTasks.filter(name => name.id !== id);
+  localStorage.setItem('userTasks', JSON.stringify(userTasks));
+  mapp();
+}
+
+
+
+
+
+
+  
+     
+  </script>
+
+</body>
+</html>
